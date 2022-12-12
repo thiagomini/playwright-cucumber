@@ -22,3 +22,40 @@ file defines an abstraction to facilitate the usage of Playwright's APIs.
 ### Testing
 
 Run `pnpm run test` to execute the tests that integrate both Cucumber and Playwright.
+
+
+### Additional context
+
+It's also possible to use decorated classes to define Cucumber's steps using [cucumber-tsflow](https://www.npmjs.com/package/cucumber-tsflow):
+```ts
+import { binding, before, after } from "cucumber-tsflow";
+
+@binding()
+class MySteps {
+    ...
+    @before()
+    public beforeAllScenarios(): void {
+        ...
+    }
+    ...
+
+    @before("requireTempDir")
+    public async beforeAllScenariosRequiringTempDirectory(): Promise<void> {
+        let tempDirInfo = await this.createTemporaryDirectory();
+
+        ...
+    }
+
+    @after()
+    public afterAllScenarios(): void {
+        ...
+    }
+
+    @after("requireTmpDir")
+    public afterAllScenarios(): void {
+        ...
+    }
+}
+
+export = MySteps;
+```
